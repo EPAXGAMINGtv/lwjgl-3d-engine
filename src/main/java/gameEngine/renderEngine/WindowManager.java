@@ -13,6 +13,12 @@ import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
 public class WindowManager {
+    /*
+        WindowManager.class
+        this class is made to create Windows and manager them later also for deltatime and stuff here here you can code frame limiter and stuff
+        written by EPAXGAMING
+     */
+
 
     private static long window; // GLFW window handle
     private static boolean fullscreen;
