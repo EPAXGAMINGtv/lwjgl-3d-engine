@@ -98,7 +98,6 @@ public class WindowManager {
         glfwFreeCallbacks(window);
         glfwDestroyWindow(window);
         glfwTerminate();
-        glfwSetErrorCallback(null).free();
     }
 
     /**
