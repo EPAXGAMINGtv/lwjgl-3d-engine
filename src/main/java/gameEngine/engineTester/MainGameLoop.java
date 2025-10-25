@@ -22,27 +22,27 @@ public class MainGameLoop {
 
     public static  void main(String[] args){
         //window creation
-        WindowManager.createWindow("testWindow",1920,1080,false,false);
+        WindowManager.createWindow("testWindow123",800,400,false,false);
 
         //Loader creation
         Loader loader = new Loader();
         //Renderer ceation
         Renderer renderer = new Renderer();
 
-        //test vertecies
+        //test
         float[] vertices = {
-                // triangle 1
-                -0.5f, -0.5f, 0f,
-                0.5f, -0.5f, 0f,
-                0.5f,  0.5f, 0f,
-                // triangle 2
-                0.5f,  0.5f, 0f,
-                -0.5f,  0.5f, 0f,
-                -0.5f, -0.5f, 0f
+                -0.5f,0.5f,0,
+                -0.5f,-0.5f,0,
+                0.5f,-0.5f,0,
+                0.5f,0.5f,0
         };
 
+        int[] indices = {
+                0,1,3,
+                3,1,2
+        };
 
-        RawModel model = loader.loadToVAO(vertices);
+        RawModel model = loader.loadToVAO(vertices,indices);
 
         //updates if the window not should close
         while (!WindowManager.shouldClose()){

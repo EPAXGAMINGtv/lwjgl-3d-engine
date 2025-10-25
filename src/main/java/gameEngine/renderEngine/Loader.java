@@ -8,6 +8,7 @@ import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
 
 import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,11 +29,12 @@ public class Loader {
     /*
         just a method to load things to the vao
      */
-    public RawModel loadToVAO(float[] positions){
+    public RawModel loadToVAO(float[] positions,int[]indices){
         int vaoID = createVAO();
+        storeDataInIntBuffer(indices);
         storeDataInAttribList(0,positions);
         unbindVAO();
-        return new RawModel(vaoID, positions.length/3);
+        return new RawModel(vaoID, indices.length);
     }
 
     /*
@@ -74,15 +76,15 @@ public class Loader {
         //store in vbo list to track some things
         vbos.add(vboID);
         //binds the vbo
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER,vboID);
+        GL20.glBindBuffer(GL15.GL_ARRAY_BUFFER,vboID);
         //creating float buffer
         FloatBuffer buffer = storeDataInFloatBuffer(data);
         //puts in gl
-        GL15.glBufferData(GL15.GL_ARRAY_BUFFER,buffer, GL15.GL_STATIC_DRAW);
+        GL20.glBufferData(GL15.GL_ARRAY_BUFFER,buffer, GL15.GL_STATIC_DRAW);
         //makes it in atrrib pointer
         GL20.glVertexAttribPointer(attribNum,3, GL11.GL_FLOAT,false,0,0);
         //unbind  buffer
-        GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER,0);
+        GL20.glBindBuffer(GL15.GL_ARRAY_BUFFER,0);
     }
 
     /*
@@ -92,6 +94,40 @@ public class Loader {
         //unbinds the list with seting it to zero
         GL30.glBindVertexArray(0);
     }
+    /*
+        method to bind indices buffers and add them to vbos
+     */
+
+    private void bindIndicesBuffer(int[]indices){
+        //creating vbo
+        int vboID =GL15.glGenBuffers();
+        //adding vbo to lost
+        vbos.add(vboID);
+        //gen buffer to user the vbo
+        GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER,vboID);
+        //convert nindices in int buffer
+        IntBuffer buffer= storeDataInIntBuffer(indices);
+        //storing
+        GL15.glBufferData(GL15.GL_ELEMENT_ARRAY_BUFFER,buffer,GL15.GL_STATIC_DRAW);
+    }
+
+    /*
+        method for storing data into an int buffer which will be used for renderering and
+        stuff later
+     */
+
+    private IntBuffer storeDataInIntBuffer(int[]data){
+        //creating int buffer wihtbuffer utils
+        IntBuffer buffer = BufferUtils.createIntBuffer(data.length);
+        //ading data into the buffer
+        buffer.put(data);
+        //flipping for reading out of it
+        buffer.flip();
+        //returning the buffer
+        return  buffer;
+    }
+
+
 
     /*
         help method to convert things into a float buffer
